@@ -1,3 +1,19 @@
-console.log('olá mundo');
-console.log("São geralmente recuperados a partir de um objeto [FileList](https://developer.mozilla.org/pt-BR/docs/Web/API/FileList) que é retornado como resultado da seleção, pelo usuário, de arquivos através do elemento [<input>](https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/Input), a partir do objeto [DataTransfer](https://developer.mozilla.org/pt-BR/docs/Web/API/DataTransfer)");
-console.log("São geralmente recuperados a partir de um objeto [FileList](https://developer.mozilla.org/pt-BR/docs/Web/API/FileList) que é retornado como resultado da seleção, pelo usuário, de arquivos através do elemento [<input>](https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/Input), a partir do objeto [DataTransfer](https://developer.mozilla.org/pt-BR/docs/Web/API/DataTransfer)");
+import fs from 'fs';
+import chalk from 'chalk';
+
+function treatError(error){
+    console.log(error);
+    throw new Error(chalk.red(error.code, "The file doesn't exist"));
+}
+
+function getFile(filePath){
+    const encoding = 'utf-8';
+    fs.readFile(filePath, encoding, (error, text) =>{
+        if(error){
+            treatError(error);
+        }
+        console.log(chalk.green(text));
+    });
+}
+
+getFile('./files/text.md');
