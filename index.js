@@ -1,6 +1,13 @@
 import fs from 'fs';
 import chalk from 'chalk';
 
+function extractLinks(text){
+    const regex = /\[([^[\]]*?)\]\((https?:\/\/[^\s?#.].[^\s]*)\)/gm;
+    const matches = [...text.matchAll(regex)];
+    const results = matches.map(match => ({[match[1]]:match[2]}));
+    return results;
+}
+
 function treatError(error){
     console.log(error);
     throw new Error(chalk.red(error.code, "The file doesn't exist"));
@@ -10,7 +17,7 @@ async function getFileAsync(filePath){
     try {
         const encoding = 'utf-8';
         const text = await fs.promises.readFile(filePath, encoding);
-        console.log(chalk.green(text));
+        console.log(extractLinks(text));
     } catch(error){
         treatError(error);
     }
@@ -36,5 +43,5 @@ function getFile(filePath){
 
 // getFile('./files/text.md');
 // getFileAsyncWithPromise('./files/text.md');
+// getFileAsync('./files/');
 getFileAsync('./files/text.md');
-getFileAsync('./files/');
